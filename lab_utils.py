@@ -55,12 +55,10 @@ def vad_led(wav_data, fs, number_of_points, frame_size=0.02, k=2, p=0.1):
     vad_output = numpy.zeros_like(wav_data)
 
     # creation of the frames
-    frames = [(wav_data[k: k + points_in_frame])
-              for k in range(0, number_of_points, points_in_frame)]
     frames = numpy.reshape(wav_data, (number_of_frames, points_in_frame))
 
     # calculate the energy of each frame
-    frame_energy = [numpy.sqrt(short_term_energy(frame)) for frame in frames]
+    frame_energy = [short_term_energy(frame) for frame in frames]
 
     # 100ms assumed to be silence
     v = int(numpy.ceil(0.1 / frame_size))
@@ -226,7 +224,7 @@ def filter_using_utils(x, h):
     x = numpy.pad(x, (0, int(n - len(x))))
     h = numpy.pad(h, (0, int(n - len(h))))
     output = dif_fft_radix2(x) * dit_fft_radix2(h)
-    return numpy.fft.ifft(output)
+    return numpy.conj(numpy.fft.fft(numpy.conj(output))/len(output))
 
 
 def random_vector(n):

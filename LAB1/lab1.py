@@ -130,9 +130,9 @@ def q5(wav_data, fs, number_of_points, noise_frequency):
     fig4 = lu.get_stem(f, numpy.abs(filtered_signal_f), title="filtered signal", title_x="f[Hz]", title_y="amp",
                        limx=[-4000, 4000], save_name="results/q5-freq-filtered-signal")
     fig5 = lu.get_plot(nt, filtered_signal, title="sound after filter 1", title_x="t", title_y="amp",
-                       save_name="results/q-time-after-filter1")
+                       save_name="results/q5-time-after-filter1")
     fig6 = lu.get_plot(nt, o1, title="sound after filter 2", title_x="t", title_y="amp",
-                       save_name="results/q-time-after-filter2")
+                       save_name="results/q5-time-after-filter2")
     return
 
 
@@ -141,11 +141,11 @@ def q_vad(wav_data, fs, number_of_points):
     vad = numpy.zeros_like(sound_data)
     for init, end in librosa.effects.split(sound_data, top_db=30):
         vad[init:end].fill(1)
-    vad_utils = lu.vad_led(wav_data, fs, number_of_points, frame_size=0.02, k=2, p=0.1)
-    fig0 = lu.get_plot(nt, wav_data, vad, title="VAD plot", title_x="t[s]", title_y="amp",
-                       save_name="results/VAD-plot")
-    fig1 = lu.get_plot(nt, wav_data, vad_utils, title="VAD UTILS plot", title_x="t[s]", title_y="amp",
-                       save_name="results/VAD-UTILS-plot")
+    vad_utils = lu.vad_led(wav_data, fs, number_of_points, k=3)
+    fig0 = lu.get_plot(nt, wav_data, vad, title="VAD librosa plot", title_x="t[s]", title_y="amp",
+                       save_name="results/VAD-librosa")
+    fig1 = lu.get_plot(nt, wav_data, vad_utils, title="VAD-LED utils plot", title_x="t[s]", title_y="amp",
+                       save_name="results/VAD-LED-utils")
     return
 
 
