@@ -10,6 +10,7 @@ import numpy
 import librosa
 import scipy
 import soundfile
+import os
 
 import lab_utils as lu
 
@@ -150,6 +151,7 @@ def q_vad(wav_data, fs, number_of_points):
 
 if __name__ == "__main__":
     plt = lu.get_plt()
+    os.makedirs("results", exist_ok=True)
 
     # preparation to LAB1
     q3_pre(r=[pow(2, i + 2) for i in range(1, 10)])
