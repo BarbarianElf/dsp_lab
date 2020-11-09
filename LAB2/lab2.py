@@ -123,22 +123,22 @@ def q5(s1, s2):
 if __name__ == "__main__":
     plt = lu.get_plt()
 
-    # # preparation to LAB2
-    # if q1_or_q2_pre(x=[1, 2, 3, 4], h=[4, 3, 2, 1]):
-    #     print("EQUAL for Q1-PRE")
-    # if q1_or_q2_pre([1, 2, 3, 4], [1, 2, 3, 4]):
-    #     print("EQUAL for Q2-PRE")
-    # q3_pre(x=[1, 2, 4], h=[1, 1, 1, 1])
-    # q3_pre(x=[0, 1, -2, 3, -4], h=[0.5, 1, 2, 1, 1, 0.5])
-    # q4_pre(1.5*scipy.signal.boxcar(5), 2*scipy.signal.boxcar(10), scipy.signal.boxcar(15), plt)
-    #
-    # # LAB2
-    # q1_and_q2(fs=2e5, number_of_points=500, plt=plt)
-    # q3(fs=1e5, number_of_points=450, plt=plt)
-    # q4(s1=[0, 3, 5, 5, 5, 2, 0.5, 0.25, 0],
-    #    s2=[1, 1, 1, 1, 1, 0, 0, 0, 0],
-    #    s3=[0, 9, 15, 15, 15, 6, 1.5, 0.75, 0],
-    #    s4=[2, 2, 2, 2, 2, 0, 0, 0, 0], plt=plt)
+    # preparation to LAB2
+    if q1_or_q2_pre(x=[1, 2, 3, 4], h=[4, 3, 2, 1]):
+        print("EQUAL for Q1-PRE")
+    if q1_or_q2_pre([1, 2, 3, 4], [1, 2, 3, 4]):
+        print("EQUAL for Q2-PRE")
+    q3_pre(x=[1, 2, 4], h=[1, 1, 1, 1])
+    q3_pre(x=[0, 1, -2, 3, -4], h=[0.5, 1, 2, 1, 1, 0.5])
+    q4_pre(1.5*scipy.signal.boxcar(5), 2*scipy.signal.boxcar(10), scipy.signal.boxcar(15), plt)
+
+    # LAB2
+    q1_and_q2(fs=2e5, number_of_points=500, plt=plt)
+    q3(fs=1e5, number_of_points=450, plt=plt)
+    q4(s1=[0, 3, 5, 5, 5, 2, 0.5, 0.25, 0],
+       s2=[1, 1, 1, 1, 1, 0, 0, 0, 0],
+       s3=[0, 9, 15, 15, 15, 6, 1.5, 0.75, 0],
+       s4=[2, 2, 2, 2, 2, 0, 0, 0, 0], plt=plt)
     q5(s1=[8, 3, 5, 0.1],
        s2=[1, 6, 0.7, 1])
 
