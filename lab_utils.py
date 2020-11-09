@@ -105,22 +105,24 @@ def fft(x):
 @timer
 def cross_correlation_fft(signal_a, signal_b):
     n = len(signal_a) + len(signal_b) - 1
-    _a = numpy.pad(signal_a, (0, int(n - len(signal_a))))
+    _a = numpy.pad(signal_a, (int(n - len(signal_a)), 0))
     _a = numpy.fft.fft(_a)
     _b = numpy.pad(signal_b, (0, int(n - len(signal_b))))
     _b = numpy.conj(numpy.fft.fft(_b))
-    return numpy.real(numpy.fft.fftshift(numpy.fft.ifft(_a * _b)))
+    return numpy.fft.ifft(_a * _b)
 
 
 @timer
 def cross_correlation(signal_a, signal_b):
     n = len(signal_a) + len(signal_b) - 1
+    signal_a = numpy.asarray(signal_a, dtype=float)
+    signal_b = numpy.asarray(signal_b, dtype=float)
     _b = signal_b[::-1]
     _a = numpy.pad(signal_a, (0, int(n - len(signal_a))))
     _b = numpy.pad(_b, (0, int(n - len(signal_b))))
     output = numpy.zeros_like(_a)
     for i in range(n):
-        for j in range(i + 1):
+        for j in range(i+1):
             output[i] = output[i] + _a[j] * _b[i-j]
     return output
 
