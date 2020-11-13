@@ -230,6 +230,11 @@ def filter_using_utils(x, h):
 
 
 def random_vector(n):
+    """
+
+    :param: n is length
+    :return: random vector with length n
+    """
     return numpy.random.rand(n)
 
 
