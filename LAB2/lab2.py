@@ -5,7 +5,7 @@ Created on November 4th 2020
 
 @authors: Niv Ben Ami & Ziv Zango
 """
-
+import os
 import numpy
 import scipy.signal
 
@@ -97,7 +97,7 @@ def q4(s1, s2, s3, s4, plt):
 
     p12 = r12/numpy.sqrt(lu.short_term_energy(s1) * lu.short_term_energy(s2))
     p34 = r34/numpy.sqrt(lu.short_term_energy(s3) * lu.short_term_energy(s4))
-    print(r12)
+
     fig1, axs = plt.subplots(2, 2, sharex=True)
     plt.subplots_adjust(hspace=0.35)
     axs[0, 0].plot(r12, 'tab:blue')
@@ -122,6 +122,7 @@ def q5(s1, s2):
 
 if __name__ == "__main__":
     plt = lu.get_plt()
+    os.makedirs("results", exist_ok=True)
 
     # preparation to LAB2
     if q1_or_q2_pre(x=[1, 2, 3, 4], h=[4, 3, 2, 1]):
