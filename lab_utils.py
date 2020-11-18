@@ -25,28 +25,6 @@ def timer(func):
     return wrapper_timer
 
 
-def new_energy_treshold(energy_treshold, frame_energy):
-    sigma_old, sigma_new = numpy.std(energy_treshold), numpy.std(frame_energy)
-    if sigma_new > 0:
-        print(sigma_new)
-        print(sigma_old)
-    try:
-        sigma_div = float(sigma_new / sigma_old)
-    except RuntimeWarning:
-        sigma_div = 1
-    except ZeroDivisionError:
-        sigma_div = 1
-    if sigma_div >= 1.25:
-        p = 0.25
-    elif 1.1 <= sigma_div <= 1.25:
-        p = 0.2
-    elif 1 <= sigma_div <= 1.1:
-        p = 0.15
-    else:
-        p = 0.1
-    return (1 - p) * energy_treshold + p * frame_energy
-
-
 def vad_led(wav_data, fs, number_of_points, frame_size=0.02, k=2, p=0.1):
     duration = number_of_points / fs
     number_of_frames = int(numpy.ceil(duration / frame_size))
@@ -58,7 +36,7 @@ def vad_led(wav_data, fs, number_of_points, frame_size=0.02, k=2, p=0.1):
     frames = numpy.reshape(wav_data, (number_of_frames, points_in_frame))
 
     # calculate the energy of each frame
-    frame_energy = [short_term_energy(frame) for frame in frames]
+    frame_energy = [short_term_energy(frame)/len(frame) for frame in frames]
 
     # 100ms assumed to be silence
     v = int(numpy.ceil(0.1 / frame_size))
@@ -79,9 +57,9 @@ def vad_led(wav_data, fs, number_of_points, frame_size=0.02, k=2, p=0.1):
 def short_term_energy(v):
     """
     :param v: array
-    :return: energy=sigma(x^2)/n
+    :return: energy=sigma(x^2)
     """
-    return numpy.sum([numpy.abs(x)**2 for x in v]) / len(v)
+    return numpy.sum([numpy.abs(x)**2 for x in v])
 
 
 def spectral_flatness_measure(x):

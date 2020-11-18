@@ -23,7 +23,8 @@ def q1_or_q2_pre(x, h):
 def q3_pre(x, h):
     y = numpy.convolve(x, h)
     r = numpy.correlate(x, h, "full")
-    print(f"Cross-Correlation result:\n{r}\nConvolution result:\n{y}")
+    print(f"Cross-Correlation result:\n{r}\n"
+          f"Convolution result:\n{y}")
     return True
 
 
@@ -51,7 +52,6 @@ def q4_pre(rect1, rect2, rect3, plt):
 
 def q1_and_q2(fs, number_of_points, plt):
     t = numpy.arange(0, number_of_points / fs, 1 / fs)
-    f = numpy.arange(-fs / 2, fs / 2, fs / number_of_points)
     x = numpy.sin(t * 2 * numpy.pi * 1000)
     awgn = numpy.random.normal(0, 1, number_of_points)
     auto_corr = numpy.correlate(x, x, mode='full')
@@ -72,7 +72,6 @@ def q1_and_q2(fs, number_of_points, plt):
 
 def q3(fs, number_of_points, plt):
     t = numpy.arange(0, number_of_points / fs, 1 / fs)
-    f = numpy.arange(-fs / 2, fs / 2, fs / number_of_points)
     x = scipy.signal.square(t * 2 * numpy.pi * 1000)
     awgn = numpy.random.normal(0, 1, number_of_points)
     xcorr = numpy.correlate(x, awgn, mode='full')
@@ -114,9 +113,12 @@ def q4(s1, s2, s3, s4, plt):
 
 def q5(s1, s2):
     res_fft, t1 = lu.cross_correlation_fft(s1, s2)
-    res_fft = numpy.round(numpy.real(res_fft), 3)
+    res_fft = numpy.round(numpy.real(res_fft), 10)
     res_corr, t2 = lu.cross_correlation(s1, s2)
-    print(f"FFT result: {res_fft}\ntime: {t1}\nresult: {res_corr}\ntime: {t2}")
+    print(f"FFT result:\t{res_fft}\n"
+          f"COR result:\t{res_corr}\n"
+          f"fft time:\t{t1}\n"
+          f"cor time:\t{t2}")
     return
 
 
@@ -140,8 +142,8 @@ if __name__ == "__main__":
        s2=[1, 1, 1, 1, 1, 0, 0, 0, 0],
        s3=[0, 9, 15, 15, 15, 6, 1.5, 0.75, 0],
        s4=[2, 2, 2, 2, 2, 0, 0, 0, 0], plt=plt)
-    q5(s1=[8, 3, 5, 0.1],
-       s2=[1, 6, 0.7, 1])
+    q5(s1=lu.random_vector(1000),
+       s2=lu.random_vector(1000))
 
     # Unmark the command blow to show ALL the figures
-    # plt.show()
+    plt.show()
