@@ -146,4 +146,4 @@ if __name__ == "__main__":
        s2=lu.random_vector(1000))
 
     # Unmark the command blow to show ALL the figures
-    plt.show()
+    # plt.show()
