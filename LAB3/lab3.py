@@ -16,13 +16,18 @@ import lab_utils as lu
 def plot_adaptive_filter_lms(u, d, filter_length, mu, harmonic=''):
     global plt
     y, e, w = adaptfilt.lms(u, d, filter_length, mu)
-    fig, axs = plt.subplots(3, sharex=True)
-    plt.subplots_adjust(hspace=0.5)
+
+    # string issue for save fig
     mu = str(str(mu).replace('.', ''))
-    if sys._getframe(1).f_code.co_name.strip() == 'q5'.strip():
+    # name of the calling function for save fig
+    func_calls_name = sys._getframe(1).f_code.co_name.strip()
+    if func_calls_name == 'q5'.strip():
         sin_name = f"Sine-wave plus harmonic {harmonic}"
     else:
         sin_name = "Sine-wave"
+
+    fig, axs = plt.subplots(3, sharex=True)
+    plt.subplots_adjust(hspace=0.5)
     fig.suptitle(f"LMS algorithm step size: {mu}  filter length: {filter_length}")
     axs[0].plot(d)
     axs[0].set_title(f'{sin_name} corrupted by noise')
@@ -30,7 +35,7 @@ def plot_adaptive_filter_lms(u, d, filter_length, mu, harmonic=''):
     axs[1].set_title(f'Cleaned {sin_name}')
     axs[2].plot(e)
     axs[2].set_title('error signal')
-    plt.savefig(f"results/{sys._getframe(1).f_code.co_name}-{harmonic}-LMS-step-{mu}-filter-length-{filter_length}")
+    plt.savefig(f"results/{func_calls_name}-{harmonic}-LMS-step-{mu}-filter-length-{filter_length}")
     fig_psd, axp = plt.subplots(2, sharex=True, sharey=True)
     plt.subplots_adjust(hspace=0.5)
     fig_psd.suptitle(f"PSD step size: {mu}  filter length: {filter_length}")
@@ -40,7 +45,7 @@ def plot_adaptive_filter_lms(u, d, filter_length, mu, harmonic=''):
     axp[1].psd(y, Fs=8000)
     axp[1].grid(True)
     axp[1].set_title('PSD after')
-    plt.savefig(f"results/{sys._getframe(1).f_code.co_name}-{harmonic}-PSD-step-{mu}-filter-length-{filter_length}")
+    plt.savefig(f"results/{func_calls_name}-{harmonic}-PSD-step-{mu}-filter-length-{filter_length}")
     return
 
 
