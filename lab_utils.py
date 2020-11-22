@@ -1,10 +1,10 @@
-'''
+"""
 utils for DSP LAB
 
 date created: October 23rd 2020
 
 authors: Niv Ben Ami & Ziv Zango
-'''
+"""
 import matplotlib.pyplot as plt
 import numpy
 import functools
