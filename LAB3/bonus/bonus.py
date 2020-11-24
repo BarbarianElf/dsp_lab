@@ -1,5 +1,5 @@
 """
-Exrta (lab 3) for DSP LAB
+Bonus (lab 3) for DSP LAB
 
 Created on November 22th 2020
 
@@ -48,17 +48,19 @@ def comparison(u, d, filter_length, step_size, type):
     fig1, axs = plt.subplots(3, 2, sharex='all')
     plt.subplots_adjust(hspace=0.35)
     fig1.suptitle(f"Comparison between 2 algorithms {type} filter")
-    axs[0, 0].plot(d, 'tab:blue')
+    x = [i for i in range(len(d))]
+    xt = [i for i in range(filter_length, len(d)+1)]
+    axs[0, 0].plot(x, d, 'tab:blue')
     axs[0, 0].set_title('desired signal')
-    axs[1, 0].plot(y0, 'tab:purple')
+    axs[1, 0].plot(xt, y0, 'tab:purple')
     axs[1, 0].set_title('my output')
-    axs[2, 0].plot(e0, 'tab:red')
+    axs[2, 0].plot(xt, e0, 'tab:red')
     axs[2, 0].set_title('my error')
-    axs[0, 1].plot(d, 'tab:blue')
+    axs[0, 1].plot(x, d, 'tab:blue')
     axs[0, 1].set_title('desired signal')
-    axs[1, 1].plot(y1, 'tab:purple')
+    axs[1, 1].plot(xt, y1, 'tab:purple')
     axs[1, 1].set_title('adaptfilt output')
-    axs[2, 1].plot(e1, 'tab:red')
+    axs[2, 1].plot(xt, e1, 'tab:red')
     axs[2, 1].set_title('adaptfilt error')
     for ax in axs.flat:
         ax.label_outer()
@@ -84,4 +86,4 @@ if __name__ == "__main__":
     comparison(u, d, 32, 0.01, type="LMS")
 
     # Unmark the command blow to show ALL the figures
-    plt.show()
+    # plt.show()

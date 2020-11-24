@@ -29,11 +29,13 @@ def plot_adaptive_filter_lms(u, d, filter_length, mu, harmonic=''):
     fig, axs = plt.subplots(3, sharex=True)
     plt.subplots_adjust(hspace=0.5)
     fig.suptitle(f"LMS algorithm step size: {mu}  filter length: {filter_length}")
-    axs[0].plot(d)
+    x = [i for i in range(len(d))]
+    xt = [i for i in range(filter_length, len(d) + 1)]
+    axs[0].plot(x, d)
     axs[0].set_title(f'{sin_name} corrupted by noise')
-    axs[1].plot(y)
+    axs[1].plot(xt, y)
     axs[1].set_title(f'Cleaned {sin_name}')
-    axs[2].plot(e)
+    axs[2].plot(xt, e)
     axs[2].set_title('error signal')
     plt.savefig(f"results/{func_calls_name}-{harmonic}-LMS-step-{mu}-filter-length-{filter_length}")
     fig_psd, axp = plt.subplots(2, sharex=True, sharey=True)
