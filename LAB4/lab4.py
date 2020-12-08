@@ -40,6 +40,7 @@ if __name__ == "__main__":
     plt = lu.get_plt()
     os.makedirs("results", exist_ok=True)
     files = ["shalom_record_ziv.wav", "shalom_record_niv.wav"]
+
     # LAB4
     figure_num = 0
     for file in files:
@@ -55,6 +56,7 @@ if __name__ == "__main__":
         mfcc = mf_cepstral_coefficients(sound_data,
                                         frequency_sampled,
                                         pre_emphasis=False,
+                                        frame_size=0.016,
                                         overlapping=0.5,
                                         mel_filters=40,
                                         dct_filters_num=12,
