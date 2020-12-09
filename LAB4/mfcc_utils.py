@@ -52,8 +52,15 @@ def pre_emphasis(signal, alpha=0.97):
 
 def framing(signal, fs, frame_size=0.016, overlapping=0.5, **kwargs):
     """
-    segment the input signal into frames of frame_size (default is 16ms)
-    with overlap (default 50%) of the frame size
+    Segment the input signal into frames with overlapping
+
+    Optional parameters
+    -------------------
+    frame_size : float
+        size of the frame is seconds (default 0.016)
+    overlapping : float (between 0 to 1)
+        overlap as percentage of the frame (default 0.5 i.e. 50%)
+        if overlapping is 0 - no overlaps
 
     :return: signal's frames
     """
@@ -115,13 +122,20 @@ def mel_filters_bank(fs, points_of_fft, mel_filters=40, normalized=False, **kwar
     number of points is the non-negative frequencies points (points_of_fft/2 +1)
     and Construct the filters as triangular filters.
 
-    number of the filters is mel_filters (default and typically 40)
-
-    normalized the filters (default False) which divide the triangular MEL
-    weights by the width of the MEL band (also called area normalization)
+    Optional parameters
+    -------------------
+    mel_filters : int
+        number of mel filters (default and typically 40)
+    normalized : boolean
+        Normalized the filters by divide the triangular MEL weights by the width
+        of the MEL band, also called area normalization (default False)
 
     :return: Mel-Filters Bank
     """
+    if type(mel_filters) is not int:
+        raise TypeError('Number of mel filters must be type integer')
+    elif mel_filters <= 0:
+        raise ValueError('Number of mel filters must be greater than 0')
     low_mel = freq_to_mel(0)
     high_mel = freq_to_mel(fs / 2)
     mel_points = numpy.linspace(low_mel, high_mel, num=mel_filters + 2)
@@ -151,12 +165,19 @@ def mel_filters_bank(fs, points_of_fft, mel_filters=40, normalized=False, **kwar
 
 def dct_filters(filter_len, dct_filters_num=12, **kwargs):
     """
-    Calculate DCT type 2 orthogonal filters,
-    number of filters is dct_filters_num (default 12)
-    filter length is filter_len
+    Calculate DCT type 2 orthogonal filters with the length ``filter_len``
+
+    Optional parameters
+    -------------------
+    dct_filters_num : int
+        number of dct filters (default 12)
 
     :return: Discrete Cosine Transform filters coefficients
     """
+    if type(dct_filters_num) is not int:
+        raise TypeError('Number of dct filters must be type integer')
+    elif dct_filters_num <= 0:
+        raise ValueError('Number of dct filters must be greater than 0')
     filters = numpy.empty((dct_filters_num, filter_len))
     filters[0, :] = 2.0 / numpy.sqrt(4 * filter_len)
 
