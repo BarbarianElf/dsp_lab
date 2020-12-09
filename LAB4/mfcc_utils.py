@@ -15,6 +15,8 @@ def power_to_db(magnitude, epsilon=1e-10, top_db=80):
     This computes the scaling ``10 * log10(magnitude)`` in a numerically
     stable way.
     in case magnitude is lower than epsilon (default 1e-10) computing with epsilon
+
+    :return: Spectrogram in dB
     """
 
     db = 10 * numpy.log10(numpy.maximum(epsilon, magnitude))
@@ -55,6 +57,8 @@ def framing(signal, fs, frame_size=0.016, overlapping=0.5, **kwargs):
 
     :return: signal's frames
     """
+    if overlapping < 0 or overlapping >= 1:
+        raise ValueError('overlapping must be between 0 to 1 not including 1')
     number_of_points = len(signal)
     points_in_frame = int(numpy.ceil(frame_size * fs))
     # Number of frames include overlapping
