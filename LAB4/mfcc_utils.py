@@ -9,6 +9,14 @@ import numpy
 
 
 def power_to_db(magnitude, epsilon=1e-10, top_db=80):
+    """
+    Convert a power spectrogram (amplitude squared) to decibel (dB) units
+
+    This computes the scaling ``10 * log10(magnitude)`` in a numerically
+    stable way.
+    in case magnitude is lower than epsilon (default 1e-10) computing with epsilon
+    """
+
     db = 10 * numpy.log10(numpy.maximum(epsilon, magnitude))
     if top_db is not None:
         if top_db < 0:
@@ -18,18 +26,35 @@ def power_to_db(magnitude, epsilon=1e-10, top_db=80):
 
 
 def freq_to_mel(freq):
+    """
+    convert frequency to MEL-scale
+    """
     return 2595 * numpy.log10(1 + freq / 700)
 
 
 def mel_to_freq(mels):
+    """
+    convert MEL-scale to frequency
+    """
     return 700 * (10**(mels / 2595) - 1)
 
 
 def pre_emphasis(signal, alpha=0.97):
+    """
+    Amplified high frequencies / Attenuator low frequencies
+
+    :return: filtered signal
+    """
     return numpy.append(signal[0], signal[1:] - alpha * signal[:-1])
 
 
 def framing(signal, fs, frame_size=0.016, overlapping=0.5, **kwargs):
+    """
+    segment the input signal into frames of frame_size (default is 16ms)
+    with overlap (default 50%) of the frame size
+
+    :return: signal's frames
+    """
     number_of_points = len(signal)
     points_in_frame = int(numpy.ceil(frame_size * fs))
     # Number of frames include overlapping
@@ -46,10 +71,20 @@ def framing(signal, fs, frame_size=0.016, overlapping=0.5, **kwargs):
 
 
 def hamming_window(length):
+    """
+    The Hamming window is a taper formed by using a weighted cosine.
+
+    :return: Hamming window.
+    """
     return numpy.array([(0.54 - 0.46 * numpy.cos(2 * numpy.pi * k / (length - 1))) for k in range(length)])
 
 
 def fft_points(signal):
+    """
+    find the nearest power of 2 of the signal
+
+    :return: Points of fft
+    """
     samples = signal.shape[signal.ndim - 1]
     p = numpy.log2(samples)
     if p.is_integer():
@@ -59,11 +94,30 @@ def fft_points(signal):
     return int(pow(2, p))
 
 
-def power_spectrum(signal,  points_of_fft):
+def power_spectrum(signal, points_of_fft=1024):
+    """
+    Perform fft with points_of_fft (default 1024),
+    takes the absolute non-negative frequencies and power by 2
+    `` P = |FFT(signal)|^2 / points_of_fft ``
+
+    :return: Power spectrum of the signal
+    """
     return (1 / points_of_fft) * (numpy.absolute(numpy.fft.rfft(signal, points_of_fft))) ** 2
 
 
 def mel_filters_bank(fs, points_of_fft, mel_filters=40, normalized=False, **kwargs):
+    """
+    Computing filters bank points with freq_to_mel from 0 to fs/2 (max) the
+    number of points is the non-negative frequencies points (points_of_fft/2 +1)
+    and Construct the filters as triangular filters.
+
+    number of the filters is mel_filters (default and typically 40)
+
+    normalized the filters (default False) which divide the triangular MEL
+    weights by the width of the MEL band (also called area normalization)
+
+    :return: Mel-Filters Bank
+    """
     low_mel = freq_to_mel(0)
     high_mel = freq_to_mel(fs / 2)
     mel_points = numpy.linspace(low_mel, high_mel, num=mel_filters + 2)
@@ -92,12 +146,19 @@ def mel_filters_bank(fs, points_of_fft, mel_filters=40, normalized=False, **kwar
 
 
 def dct_filters(filter_len, dct_filters_num=12, **kwargs):
-    filters = numpy.empty((dct_filters_num, filter_len))
-    filters[0, :] = 1.0 / numpy.sqrt(filter_len)
+    """
+    Calculate DCT type 2 orthogonal filters,
+    number of filters is dct_filters_num (default 12)
+    filter length is filter_len
 
-    samples = numpy.arange(1, 2 * filter_len, 2) * numpy.pi / (2.0 * filter_len)
+    :return: Discrete Cosine Transform filters coefficients
+    """
+    filters = numpy.empty((dct_filters_num, filter_len))
+    filters[0, :] = 2.0 / numpy.sqrt(4 * filter_len)
+
+    samples = numpy.arange(1, 2 * filter_len, 2) / (2.0 * filter_len)
 
     for i in range(1, dct_filters_num):
-        filters[i, :] = numpy.cos(i * samples) * numpy.sqrt(2.0 / filter_len)
+        filters[i, :] = 2 * numpy.cos(numpy.pi * i * samples) * numpy.sqrt(1.0 / (2.0 * filter_len))
 
     return filters
