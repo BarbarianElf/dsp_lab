@@ -11,7 +11,7 @@ import numpy
 import librosa
 import os
 
-import LAB4.mfcc_utils as utils
+import mfcc_utils as utils
 import lab_utils as lu
 
 
@@ -151,6 +151,8 @@ if __name__ == "__main__":
         plt.figure(figure_num)
         plt.title(f'{name}\nMel-Frequency Cepstral Coefficients')
         plt.pcolormesh(mfcc)
+        plt.ylabel('Cepstrals')
+        plt.xlabel('Frames')
         plt.savefig(f"results/{name}_MFCC")
         figure_num += 1
 
@@ -181,6 +183,8 @@ if __name__ == "__main__":
         plt.figure(figure_num)
         plt.title(f'{name}\nLIBROSA: Mel-Frequency Cepstral Coefficients')
         plt.pcolormesh(libros_mfcc)
+        plt.ylabel('Cepstrals')
+        plt.xlabel('Frames')
         plt.savefig(f"results/{name}_LIBROSA_mfcc")
         figure_num += 1
 
