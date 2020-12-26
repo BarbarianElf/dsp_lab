@@ -12,7 +12,7 @@ import operator
 from functools import reduce
 
 import lab_utils as lu
-from LAB5.neural_network import NeuralNetwork as NN
+from neural_network import NeuralNetwork as NN
 
 MAX_INPUT = 8
 
@@ -87,7 +87,6 @@ if __name__ == "__main__":
         plt.xlabel('iteration')
         plt.ylabel('MSE')
         plt.xlim([1, iteration])
-        plt.ylim([0, 0.5])
         plt.plot(t, error)
         plt.grid(True)
         plt.savefig(f"results/MSE_for_{hidden_layer_nodes}_nodes")

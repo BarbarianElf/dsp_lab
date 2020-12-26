@@ -121,9 +121,9 @@ class NeuralNetwork:
         self.error = self.outputs - self.o_layer
 
         delta1 = self.error * self.sigmoid(self.o_layer, deriv=True)
-        self.weights1 += learning_rate * numpy.dot(self.h_layer1.T, delta1)
+        delta0 = numpy.dot(delta1, self.weights1.T) * self.sigmoid(self.h_layer1, deriv=True)
 
-        delta0 = numpy.dot(self.error, self.weights1.T) * self.sigmoid(self.h_layer1, deriv=True)
+        self.weights1 += learning_rate * numpy.dot(self.h_layer1.T, delta1)
         self.weights0 += learning_rate * numpy.dot(self.inputs.T, delta0)
 
         for b in delta1:
