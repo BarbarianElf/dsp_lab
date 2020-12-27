@@ -63,6 +63,25 @@ def get_operation_bit_vector_output(x, operation=operator.xor):
     return numpy.reshape(numpy.asarray([reduce(operation, x[index]) for index in range(MAX_INPUT)]), (-1, 1))
 
 
+def test_nn_output(nn, h_nodes):
+    """
+    Testing for Neural Network
+
+    Parameters
+    ----------
+    nn : NeuralNetwork object
+
+    h_nodes : int
+        Desired number of neurals in hidden layer, must be natural.
+    """
+    test_vector1 = numpy.array([[0, 1, 0]])
+    test_vector2 = numpy.array([[0, 1, 1]])
+    test_out1 = nn.predict(test_vector1)
+    test_out2 = nn.predict(test_vector2)
+    print(f"input: {test_vector1}\tprediction: {test_out1}\tNodes: {h_nodes}")
+    print(f"input: {test_vector2}\tprediction: {test_out2}\tNodes: {h_nodes}")
+
+
 if __name__ == "__main__":
     plt = lu.get_plt()
     os.makedirs("results", exist_ok=True)
@@ -91,5 +110,8 @@ if __name__ == "__main__":
         plt.grid(True)
         plt.savefig(f"results/MSE_for_{hidden_layer_nodes}_nodes")
 
+        # Unmark the command blow to test the neural network
+        # test_nn_output(n_net, hidden_layer_nodes)
+
     # Unmark the command blow to show ALL the figures
-    # plt.show()
+    plt.show()

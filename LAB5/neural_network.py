@@ -10,7 +10,7 @@ import numpy
 
 class NeuralNetwork:
     """
-    A class of Neural Network with 1 hidden layer
+    A class of Artificial Neural Network with 1 hidden layer
 
     Attributes
     ----------
@@ -99,12 +99,16 @@ class NeuralNetwork:
             return x * (1 - x)
         return 1 / (1 + numpy.exp(-x))
 
-    def feed_forward(self):
+    def feed_forward(self, new_input=None):
         """
         Feed forward the input data through the Neural Network,
         and produce the output.
         """
-        self.h_layer1 = self.sigmoid(numpy.dot(self.inputs, self.weights0) + self.bias0)
+        if new_input is None:
+            i_layer = self.inputs
+        else:
+            i_layer = new_input
+        self.h_layer1 = self.sigmoid(numpy.dot(i_layer, self.weights0) + self.bias0)
         self.o_layer = self.sigmoid(numpy.dot(self.h_layer1, self.weights1) + self.bias1)
 
     def back_propagation(self, learning_rate):
@@ -123,13 +127,11 @@ class NeuralNetwork:
         delta1 = self.error * self.sigmoid(self.o_layer, deriv=True)
         delta0 = numpy.dot(delta1, self.weights1.T) * self.sigmoid(self.h_layer1, deriv=True)
 
-        self.weights1 += learning_rate * numpy.dot(self.h_layer1.T, delta1)
-        self.weights0 += learning_rate * numpy.dot(self.inputs.T, delta0)
+        self.weights1 += learning_rate * numpy.dot(self.h_layer1.T, delta1) / delta1.shape[0]
+        self.weights0 += learning_rate * numpy.dot(self.inputs.T, delta0) / delta0.shape[0]
 
-        for b in delta1:
-            self.bias1 += learning_rate * b
-        for b in delta0:
-            self.bias0 += learning_rate * b
+        self.bias1 += learning_rate * delta1.mean()
+        self.bias0 += learning_rate * delta0.mean(axis=0)
 
     def train(self, epochs=10000, learning_rate=1):
         """
@@ -166,6 +168,5 @@ class NeuralNetwork:
             N-dimensional output (index, output) of the Neural Network,
             i.e the prediction.
         """
-        self.h_layer1 = self.sigmoid(numpy.dot(new_input, self.weights0) + self.bias0)
-        self.o_layer = self.sigmoid(numpy.dot(self.h_layer1, self.weights1) + self.bias1)
+        self.feed_forward(new_input)
         return self.o_layer
