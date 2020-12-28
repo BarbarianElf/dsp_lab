@@ -12,7 +12,7 @@ import operator
 from functools import reduce
 
 import lab_utils as lu
-from neural_network import NeuralNetwork as NN
+from neural_network import NeuralNetwork
 
 MAX_INPUT = 8
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         t = numpy.arange(1, 101)
         error = []
         for i in range(1, iteration + 1):
-            n_net = NN(x_input, y_output, hidden_layer_nodes)
+            n_net = NeuralNetwork(x_input, y_output, hidden_layer_nodes)
             n_net.train(epochs=2000, learning_rate=2)
             error.append(numpy.square(n_net.error).mean())
         plt.figure(q)
@@ -114,4 +114,4 @@ if __name__ == "__main__":
         # test_nn_output(n_net, hidden_layer_nodes)
 
     # Unmark the command blow to show ALL the figures
-    plt.show()
+    # plt.show()
